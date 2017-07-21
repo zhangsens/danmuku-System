@@ -1,0 +1,84 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        .danmuku {
+            position: relative;
+        }
+        
+        .danmuku canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        video {
+            background-color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="danmuku" width="1500" item-height="800">
+        <video src="https://gss3.baidu.com/6LZ0ej3k1Qd3ote6lo7D0j9wehsv/tieba-smallvideo/84_9ef80b410df47c8ba6478cbd4de3d610.mp4" width="1200" height="800" controls>
+        </video>
+        <canvas width="1200" height="800"></canvas>
+    </div>
+
+    <script>
+        var danmaku = [{
+            time: "1",
+            content: "草船"
+        }, {
+            time: "60",
+            content: "G胖还我血汗钱"
+        }, {
+            time: "4",
+            content: "神秘代码"
+        }, {
+            time: "16",
+            content: "赞美G胖"
+        }, {
+            time: "1",
+            content: "劲爆大象部落"
+        }, {
+            time: "0.5",
+            content: "看看"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }]
+    </script>
+    <script src="./dist/cDraw.min.js"></script>
+    <script>
+        var video = document.querySelector("video");
+        var canvas = document.querySelector("canvas");
+    </script>
+    <script>
+        var a = new cDraw({
+            ele: document.querySelector("canvas"),
+            media: video,
+            danmaku: danmaku
+        });
+    </script>
+    <script>
+        video.play();
+        canvas.onclick = video.onclick = function() {
+            if (video.paused) {
+                a.danmaku_sort_reset();
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+        video.addEventListener("ended", function() {
+            console.log("play end");
+            video.currentTime = 0;
+            a.danmaku_sort_reset();
+        })
+    </script>
+</body>
+
+</html>

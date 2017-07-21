@@ -1,11 +1,11 @@
 const webpack = require("webpack");
 
 module.exports = {
-    entry: "/src/",
+    entry: "./src/cDraw.js",
     output: {
-        path: "",
-        filename: "",
-        library: "",
+        path: __dirname + "/dist",
+        filename: "cDraw.min.js",
+        library: "cDraw",
         libraryTarget: "umd"
     },
     module: {
