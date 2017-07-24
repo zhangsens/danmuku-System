@@ -3,7 +3,7 @@ const font = {
     variant: "normal",
     weight: "900",
     family: "SimHei",
-    size: "24"
+    size: 24
 }
 
 module.exports = font;
