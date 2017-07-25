@@ -24,7 +24,12 @@
     <div class="danmuku" width="1500" item-height="800">
         <video src="https://gss3.baidu.com/6LZ0ej3k1Qd3ote6lo7D0j9wehsv/tieba-smallvideo/84_9ef80b410df47c8ba6478cbd4de3d610.mp4" width="1200" height="800" controls>
         </video>
-        <canvas width="1200" height="800"></canvas>
+        <canvas id="canvas" width="1200" height="700"></canvas>
+    </div>
+    <div class="zhibo">
+        <canvas id="zhibo" style="background:#000;" width="1200" height="200"></canvas>
+        <input type="text" value="作者好帅">
+        <button>发送</button>
     </div>
 
     <script>
@@ -54,17 +59,29 @@
     <script src="./dist/cDraw.min.js"></script>
     <script>
         var video = document.querySelector("video");
-        var canvas = document.querySelector("canvas");
+        var canvas = document.querySelector("#canvas");
+        var _canvas = document.querySelector("#zhibo");
+        var input = document.querySelector("input");
+        var button = document.querySelector("button");
     </script>
     <script>
         var a = new cDraw({
-            ele: document.querySelector("canvas"),
+            type: 1,
+            ele: canvas,
             media: video,
             danmaku: danmaku
         });
+        var b = new cDraw({
+            type: 0,
+            ele: _canvas
+        });
+        button.addEventListener("click", function() {
+            var _val = input.value;
+            _val ? b.danmaku_input(_val) : console.log("no content");
+            input.value = "";
+        });
     </script>
     <script>
-        video.play();
         canvas.onclick = video.onclick = function() {
             event.preventDefault();
             if (video.paused) {

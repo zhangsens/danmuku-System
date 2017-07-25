@@ -15,23 +15,35 @@ class cDraw {
         this.danmaku_played = true;
         this.canvas = option.ele || canvas;
         this.ctx = this.canvas.getContext("2d");
+        this.ctx.font = font.weight + " " + font.size + "px " + font.family;
         this.gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, 0);
+        this.gradient.addColorStop("0", "white");
+        this.ctx.fillStyle = this.gradient;
         this.position_x = this.canvas.width;
         this.media = option.media;
-        this.add_danmaku(option.danmaku);
 
-        this.ctx.font = font.weight + " " + font.size + "px " + font.family;
+        if (option.type) {
 
-        requestAnimationFrame(this.danmaku_animation.bind(this));
-        requestAnimationFrame(this.danmaku_video_add_animation.bind(this));
+            this.add_danmaku(option.danmaku);
 
-        this.canvas.addEventListener("mouseup", this.danmaku_search.bind(this));
-        this.canvas.addEventListener("contextmenu", function() {
-            event.preventDefault();
-        });
-        this.media.addEventListener("play", function() {
+            this.canvas.addEventListener("mouseup", this.danmaku_search.bind(this));
+            this.canvas.addEventListener("contextmenu", function() {
+                event.preventDefault();
+            });
+            this.media.addEventListener("play", function() {
+                this.danmaku_played = true;
+                requestAnimationFrame(this.danmaku_animation.bind(this));
+                requestAnimationFrame(this.danmaku_video_add_animation.bind(this));
+            }.bind(this));
+            this.media.addEventListener("pause", function() {
+                this.danmaku_played = false;
+            }.bind(this));
+
+        } else {
+
             requestAnimationFrame(this.danmaku_animation.bind(this));
-        });
+
+        }
     }
 
     add_danmaku(array) {
@@ -45,8 +57,6 @@ class cDraw {
         this.ctx.clearRect(0, 0, 1200, 800);
 
         for (let i = 0; i < this.danmaku_video.length; i++) {
-            this.gradient.addColorStop("0", "white");
-            this.ctx.fillStyle = this.gradient;
             this.ctx.fillText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
             this.danmaku_video[i].position_x += -this.danmaku_speed;
             if (this.danmaku_video[i].position_x < -this.danmaku_video[i].content.length * font.size) {
@@ -55,7 +65,7 @@ class cDraw {
             }
         }
 
-        if (!this.media.paused) {
+        if (this.danmaku_played) {
             requestAnimationFrame(this.danmaku_animation.bind(this));
         }
 
@@ -69,8 +79,10 @@ class cDraw {
                 this.danmaku_sort[0].position_y = (height + 1) * font.size;
                 this.danmaku_video.push(new danmaku_object(this.danmaku_sort[0].content, this.danmaku_sort[0].time, this.position_x, (height + 1) * font.size));
                 this.danmaku_sort.splice(0, 1);
-                height++;
+                this.height();
                 i--;
+            } else {
+                break;
             }
         }
 
@@ -96,8 +108,6 @@ class cDraw {
     }
 
     danmaku_search(e) {
-
-
 
         if (e.button == 2) {
 
@@ -129,6 +139,19 @@ class cDraw {
                 }
             }
             console.log("end");
+        }
+    }
+
+    danmaku_input(content) {
+        this.danmaku_video.push(new danmaku_object(content, 0, this.position_x, (height + 1) * font.size));
+        this.height();
+    }
+
+    height() {
+        if (height > this.canvas.height) {
+            height = 0
+        } else {
+            height++;
         }
     }
 }
