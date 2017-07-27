@@ -16,9 +16,9 @@ class cDraw {
         this.canvas = option.ele || canvas;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.font = font.weight + " " + font.size + "px " + font.family;
-        this.gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, 0);
-        this.gradient.addColorStop("0", "white");
-        this.ctx.fillStyle = this.gradient;
+        this.ctx.strokeStyle = "#000000";
+        this.ctx.fillStyle = "#ffffff";
+        this.ctx.lineWidth = 1;
         this.position_x = this.canvas.width;
         this.media = option.media;
 
@@ -38,7 +38,6 @@ class cDraw {
             this.media.addEventListener("pause", function() {
                 this.danmaku_played = false;
             }.bind(this));
-
         } else {
 
             requestAnimationFrame(this.danmaku_animation.bind(this));
@@ -54,11 +53,12 @@ class cDraw {
 
     danmaku_animation() {
 
-        this.ctx.clearRect(0, 0, 1200, 800);
+        this.ctx.clearRect(0, 0, 1200, 700);
 
         for (let i = 0; i < this.danmaku_video.length; i++) {
             this.ctx.fillText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
-            this.danmaku_video[i].position_x += -this.danmaku_speed;
+            this.ctx.strokeText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
+            this.danmaku_video[i].position_x -= this.danmaku_speed;
             if (this.danmaku_video[i].position_x < -this.danmaku_video[i].content.length * font.size) {
                 this.danmaku_video.splice(i, 1);
                 i--;
@@ -72,7 +72,6 @@ class cDraw {
     }
 
     danmaku_video_add_animation() {
-
         for (let i = 0; i < this.danmaku_sort.length; i++) {
             if (this.danmaku_sort.length > 0 && this.danmaku_sort[0].time < this.media.currentTime) {
                 this.danmaku_sort[0].position_x = this.position_x;
@@ -149,7 +148,7 @@ class cDraw {
 
     height() {
         if (height > this.canvas.height) {
-            height = 0
+            height = 0;
         } else {
             height++;
         }
