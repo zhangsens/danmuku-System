@@ -5,7 +5,7 @@ const danmaku_object = require("./danmaku_object");
 var height = 0;
 setInterval(() => { height = 0 }, 2000)
 
-class cDraw {
+class cDanmaku {
     constructor(option) {
 
         this.danmaku_store = new Array();
@@ -155,4 +155,4 @@ class cDraw {
     }
 }
 
-module.exports = cDraw;
+module.exports = cDanmaku;

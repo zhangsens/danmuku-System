@@ -4,8 +4,8 @@ module.exports = {
     entry: "./src/cDraw.js",
     output: {
         path: __dirname + "/dist",
-        filename: "cDraw.min.js",
-        library: "cDraw",
+        filename: "cDanmaku.min.js",
+        library: "cDanmaku",
         libraryTarget: "umd"
     },
     module: {
