@@ -6,6 +6,7 @@ var height = 0;
 setInterval(() => { height = 0 }, 2000)
 
 class cDanmaku {
+
     constructor(option) {
 
         this.danmaku_store = new Array();
@@ -38,6 +39,7 @@ class cDanmaku {
             this.media.addEventListener("pause", function() {
                 this.danmaku_played = false;
             }.bind(this));
+
         } else {
 
             requestAnimationFrame(this.danmaku_animation.bind(this));
@@ -49,39 +51,42 @@ class cDanmaku {
 
         this.danmaku_store = this.danmaku_store.concat(array);
         this.danmaku_sort_reset();
+
     }
 
-    danmaku_animation() {
+    danmaku_sort_reset() {
 
-        this.ctx.clearRect(0, 0, 1200, 700);
+        this.danmaku_sort = [].concat(this.danmaku_store);
+        this.danmaku_sort.sort(this.sort);
 
-        for (let i = 0; i < this.danmaku_video.length; i++) {
-            this.ctx.fillText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
-            this.ctx.strokeText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
-            this.danmaku_video[i].position_x -= this.danmaku_speed;
-            if (this.danmaku_video[i].position_x < -this.danmaku_video[i].content.length * font.size) {
-                this.danmaku_video.splice(i, 1);
+        for (let i = 0; i < this.danmaku_sort.length; i++) {
+            if (this.danmaku_sort[0].time < this.media.currentTime) {
+                this.danmaku_sort.splice(0, 1);
                 i--;
             }
         }
-
-        if (this.danmaku_played) {
-            requestAnimationFrame(this.danmaku_animation.bind(this));
-        }
-
     }
 
     danmaku_video_add_animation() {
+
         for (let i = 0; i < this.danmaku_sort.length; i++) {
-            if (this.danmaku_sort.length > 0 && this.danmaku_sort[0].time < this.media.currentTime) {
+
+            if (
+                this.danmaku_sort.length > 0 &&
+                this.danmaku_sort[0].time < this.media.currentTime
+            ) {
+
                 this.danmaku_sort[0].position_x = this.position_x;
                 this.danmaku_sort[0].position_y = (height + 1) * font.size;
-                this.danmaku_video.push(new danmaku_object(this.danmaku_sort[0].content, this.danmaku_sort[0].time, this.position_x, (height + 1) * font.size));
+                this.danmaku_video.push(new danmaku_object(this.danmaku_sort[0]));
                 this.danmaku_sort.splice(0, 1);
-                this.height();
+                this.danmaku_height();
                 i--;
+
             } else {
+
                 break;
+
             }
         }
 
@@ -91,19 +96,32 @@ class cDanmaku {
 
     }
 
-    danmaku_sort_reset() {
+    danmaku_input(content) {
 
-        this.danmaku_sort = [].concat(this.danmaku_store);
-        this.danmaku_sort.sort(function(a, b) {
-            return a.time - b.time;
-        });
+        var _option = new Object();
 
-        for (let i = 0; i < this.danmaku_sort.length; i++) {
-            if (this.danmaku_sort[0].time < this.media.currentTime) {
-                this.danmaku_sort.splice(0, 1);
-                i--;
-            }
+        _option.content = content;
+        _option.time = 0;
+        _option.position_x = this.position_x;
+        _option.position_y = (height + 1) * font.size;
+
+        this.danmaku_video.push(new danmaku_object(_option));
+        this.danmaku_height();
+
+    }
+
+    danmaku_height() {
+
+        if (height > this.canvas.height) {
+            height = 0;
+        } else {
+            height++;
         }
+
+    }
+
+    sort(a, b) {
+        return a.time - b.time;
     }
 
     danmaku_search(e) {
@@ -126,8 +144,11 @@ class cDanmaku {
                 }
 
             }
+
             if (_search) {
+
                 for (let i = 0; i < this.danmaku_store.length; i++) {
+
                     if (
                         this.danmaku_store[i].time == _search.time &&
                         this.danmaku_store[i].content == _search.content
@@ -135,23 +156,31 @@ class cDanmaku {
                         let index = this.danmaku_store.indexOf(this.danmaku_store[i]);
                         console.log(this.danmaku_store[index]);
                     }
+
                 }
             }
             console.log("end");
         }
     }
 
-    danmaku_input(content) {
-        this.danmaku_video.push(new danmaku_object(content, 0, this.position_x, (height + 1) * font.size));
-        this.height();
-    }
+    danmaku_animation() {
 
-    height() {
-        if (height > this.canvas.height) {
-            height = 0;
-        } else {
-            height++;
+        this.ctx.clearRect(0, 0, 1200, 700);
+
+        for (let i = 0; i < this.danmaku_video.length; i++) {
+            this.ctx.fillText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
+            this.ctx.strokeText(this.danmaku_video[i].content, this.danmaku_video[i].position_x, this.danmaku_video[i].position_y);
+            this.danmaku_video[i].position_x -= this.danmaku_speed;
+            if (this.danmaku_video[i].position_x < -this.danmaku_video[i].content.length * font.size) {
+                this.danmaku_video.splice(i, 1);
+                i--;
+            }
         }
+
+        if (this.danmaku_played) {
+            requestAnimationFrame(this.danmaku_animation.bind(this));
+        }
+
     }
 }
 
