@@ -54,6 +54,39 @@
         }, {
             time: "1.7",
             content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
+        }, {
+            time: "1.7",
+            content: "lol"
         }]
     </script>
     <script src="./dist/cDanmaku.min.js"></script>
@@ -71,21 +104,21 @@
             media: video,
             danmaku: danmaku
         });
-        var b = new cDanmaku({
-            type: 0,
-            ele: _canvas
-        });
-        button.addEventListener("click", function() {
-            var _val = input.value;
-            _val ? b.danmaku_input(_val) : console.log("no content");
-            input.value = "";
-        });
+        // var b = new cDanmaku({
+        //     type: 0,
+        //     ele: _canvas
+        // });
+        // button.addEventListener("click", function() {
+        //     var _val = input.value;
+        //     _val ? b.danmaku_input(_val) : console.log("no content");
+        //     input.value = "";
+        // });
     </script>
     <script>
         canvas.onclick = video.onclick = function() {
             event.preventDefault();
             if (video.paused) {
-                a.danmaku_sort_reset();
+                //a.danmaku_sort_reset();
                 video.play();
             } else {
                 video.pause();
@@ -94,17 +127,17 @@
         video.addEventListener("ended", function() {
             console.log("play end");
             video.currentTime = 0;
-            a.danmaku_sort_reset();
-        })
-        video.addEventListener("play", function() {
-            console.log("play");
-        })
-        video.addEventListener("playing", function() {
-            console.log("playing");
-        })
-        video.addEventListener("pause", function() {
-            console.log("pause");
-        })
+            a.danmaku_reset();
+        });
+        // video.addEventListener("play", function() {
+        //     console.log("play");
+        // })
+        // video.addEventListener("playing", function() {
+        //     console.log("playing");
+        // })
+        // video.addEventListener("pause", function() {
+        //     console.log("pause");
+        // })
     </script>
 </body>
 
